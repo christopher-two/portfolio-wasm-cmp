@@ -1,22 +1,42 @@
 package org.christophertwo.portfolio.ui.components.sections
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -24,10 +44,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.zIndex
 import coil3.compose.AsyncImage
-import coil3.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import portfolio.composeapp.generated.resources.Res
+import portfolio.composeapp.generated.resources.arrow_back_ios_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
 import portfolio.composeapp.generated.resources.arrow_forward_ios_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24
 
 data class Project(
@@ -54,8 +78,8 @@ fun ProjectCard(
 ) {
     Card(
         modifier = modifier
-            .fillMaxWidth()
-            .height(320.dp)
+            .width(500.dp)
+            .height(500.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -150,25 +174,96 @@ fun ProjectCard(
 @Composable
 fun ProjectsGrid(
     projects: List<Project>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    windowSizeWidth: Int
 ) {
     var selectedProject by remember { mutableStateOf<Project?>(null) }
+    val scrollState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 300.dp),
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        items(projects) { project ->
-            ProjectCard(
-                project = project,
-                onClick = { selectedProject = project }
-            )
+    // Estados para el scroll continuo
+    var isScrollingLeft by remember { mutableStateOf(false) }
+    var isScrollingRight by remember { mutableStateOf(false) }
+
+    // Función para scroll suave
+    fun scrollLeft() {
+        coroutineScope.launch {
+            val currentIndex = scrollState.firstVisibleItemIndex
+            if (currentIndex > 0) {
+                scrollState.animateScrollToItem(maxOf(0, currentIndex - 1))
+            }
         }
     }
+
+    fun scrollRight() {
+        coroutineScope.launch {
+            val currentIndex = scrollState.firstVisibleItemIndex
+            if (currentIndex < projects.size - 1) {
+                scrollState.animateScrollToItem(minOf(projects.size - 1, currentIndex + 1))
+            }
+        }
+    }
+
+    // Efecto para scroll continuo
+    LaunchedEffect(isScrollingLeft) {
+        while (isScrollingLeft) {
+            scrollLeft()
+            delay(150) // Velocidad del scroll continuo
+        }
+    }
+
+    LaunchedEffect(isScrollingRight) {
+        while (isScrollingRight) {
+            scrollRight()
+            delay(150) // Velocidad del scroll continuo
+        }
+    }
+
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+        content = {
+            // Botón izquierdo
+            if (scrollState.firstVisibleItemIndex > 0 && windowSizeWidth > 700) {
+                ScrollButton(
+                    icon = Res.drawable.arrow_back_ios_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
+                    onClick = { scrollLeft() },
+                    onPressStart = { isScrollingLeft = true },
+                    onPressEnd = { isScrollingLeft = false },
+                    modifier = Modifier.align(Alignment.CenterStart)
+                )
+            }
+
+            LazyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp), // Espacio para los botones
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalAlignment = Alignment.Top,
+                state = scrollState
+            ) {
+                items(projects) { project ->
+                    ProjectCard(
+                        project = project,
+                        modifier = Modifier.width(
+                            if (windowSizeWidth > 700) 500.dp else 300.dp
+                        ),
+                        onClick = { selectedProject = project }
+                    )
+                }
+            }
+
+            if (scrollState.firstVisibleItemIndex < projects.size - 1 && windowSizeWidth > 700) {
+                ScrollButton(
+                    icon = Res.drawable.arrow_forward_ios_24dp_E3E3E3_FILL0_wght400_GRAD0_opsz24,
+                    onClick = { scrollRight() },
+                    onPressStart = { isScrollingRight = true },
+                    onPressEnd = { isScrollingRight = false },
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                )
+            }
+        }
+    )
 
     // Dialog de detalle del proyecto
     selectedProject?.let { project ->
@@ -180,6 +275,59 @@ fun ProjectsGrid(
     }
 }
 
+@Composable
+private fun ScrollButton(
+    icon: DrawableResource,
+    onClick: () -> Unit,
+    onPressStart: () -> Unit,
+    onPressEnd: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var isPressed by remember { mutableStateOf(false) }
+
+    // Efecto para manejar el click único vs presión continua
+    LaunchedEffect(isPressed) {
+        if (isPressed) {
+            onPressStart()
+            delay(500) // Delay inicial antes de empezar scroll continuo
+            // El scroll continuo se maneja en el LaunchedEffect del composable padre
+        } else {
+            onPressEnd()
+        }
+    }
+
+    Card(
+        modifier = modifier
+            .size(48.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = { offset ->
+                        isPressed = true
+                        onClick() // Click inmediato
+                        tryAwaitRelease() // Espera hasta que se suelte
+                        isPressed = false
+                    }
+                )
+            }
+            .zIndex(5f),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f)
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(icon),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(24.dp)
+            )
+        }
+    }
+}
 
 @Composable
 fun ProjectDetailDialog(
@@ -345,7 +493,10 @@ fun ProjectDetailDialog(
                                         text = tech,
                                         fontSize = 12.sp,
                                         color = Color(0xFF4CAF50),
-                                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)
+                                        modifier = Modifier.padding(
+                                            horizontal = 12.dp,
+                                            vertical = 6.dp
+                                        )
                                     )
                                 }
                             }

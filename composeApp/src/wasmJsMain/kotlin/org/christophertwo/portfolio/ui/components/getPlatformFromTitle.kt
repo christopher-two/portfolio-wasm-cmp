@@ -3,11 +3,31 @@ package org.christophertwo.portfolio.ui.components
 // Función para obtener la plataforma basada en el título
 fun getPlatformFromTitle(title: String): String {
     return when {
+        // Casos específicos para proyectos multiplataforma para mayor precisión
+        title.contains("Quickness", ignoreCase = true) -> "Multiplatform"
+        title.contains("Lerna", ignoreCase = true) -> "Multiplatform"
+        title.contains("Eva", ignoreCase = true) -> "Multiplatform"
+        title.contains("Calabozos y compuertas", ignoreCase = true) -> "Multiplatform"
+        title.contains("Squidgame", ignoreCase = true) -> "Multiplatform"
+        title.contains("Color", ignoreCase = true) -> "Multiplatform"
+
+        // Casos específicos para mobile
+        title.contains("Lyra", ignoreCase = true) -> "Mobile App"
+        title.contains("Lumi", ignoreCase = true) -> "Mobile App"
+        title.contains("SquidGames (Version Mobile)", ignoreCase = true) -> "Mobile App"
+        title.contains("DragonMatches", ignoreCase = true) -> "Mobile App"
+
+        // Casos generales
+        title.contains("Portafolio Daniela Navarro Galeana", ignoreCase = true) -> "Web"
+        title.contains("Eikocolors", ignoreCase = true) -> "Web"
+        title.contains("Fuente", ignoreCase = true) -> "Web"
+        title.contains("Danonino", ignoreCase = true) -> "Web"
+        title.contains("Asian", ignoreCase = true) -> "Web"
         title.contains("App", ignoreCase = true) -> "Mobile App"
         title.contains("web", ignoreCase = true) -> "Web"
         title.contains("Desktop", ignoreCase = true) -> "Desktop"
         title.contains("KMP", ignoreCase = true) -> "Multiplatform"
-        else -> "Web"
+        else -> "Web" // Valor por defecto
     }
 }
 
@@ -15,64 +35,83 @@ fun getPlatformFromTitle(title: String): String {
 fun getProjectDetails(title: String): Pair<String, List<String>> {
     return when {
         title.contains("Quickness", ignoreCase = true) -> Pair(
-            "Aplicación móvil para gestión de tareas rápidas y eficientes. Permite crear, organizar y completar tareas con una interfaz intuitiva y moderna.",
-            listOf("Kotlin", "Jetpack Compose", "Room", "Coroutines", "Material Design")
+            "Quickness es un sistema innovador diseñado para modernizar y centralizar la gestión de todo tipo de accesos. Ofrece una solución segura, eficiente y fácil de usar para una amplia gama de aplicaciones, incluyendo edificios corporativos, eventos masivos, gimnasios, zonas residenciales, estacionamientos, servicios exclusivos y transporte público. Quickness unifica el control de acceso bajo una misma plataforma, transformando la gestión de accesos en una experiencia más confiable, segura, inteligente y ágil.",
+            listOf(
+                "Compose Multiplatform", "Room", "Datastore", "Koin", "Ktor", "Firebase",
+                "Gemini Api", "Biometric", "Moko Permissions", "Coil", "MVVM",
+                "Clean Architecture", "Multimodularity", "Layered Model", "Repository Pattern", "DeepLinks"
+            )
         )
         title.contains("Lerna", ignoreCase = true) -> Pair(
-            "Plataforma de gestión de proyectos colaborativos. Facilita la coordinación entre equipos con herramientas de seguimiento y comunicación.",
-            listOf("React", "Node.js", "MongoDB", "Express", "Socket.io")
+            "Plataforma que ofrece diversas herramientas digitales para mejorar la productividad y eficiencia de los profesores en la enseñanza.",
+            listOf(
+                "Compose Multiplatform (Desktop & Wasm)", "Koin", "Ktor", "Coil", "Firebase", "Classroom API",
+                "Backend (Ktor)", "Docker", "Google Cloud Functions", "Gemini API", "MVVM",
+                "Clean Architecture", "Multimodularity", "Layered Model", "Repository Pattern"
+            )
         )
         title.contains("Lyra", ignoreCase = true) -> Pair(
-            "Aplicación de reproducción musical con funciones avanzadas de gestión de biblioteca y recomendaciones personalizadas.",
-            listOf("Flutter", "Dart", "Firebase", "Audio Players", "Material Design")
+            "Un ecosistema integral diseñado para mejorar y optimizar la práctica de los profesionales de la nutrición, ofreciendo una solución completa que va más allá de una simple aplicación de nutrición.",
+            listOf(
+                "Jetpack Compose", "Room", "Datastore", "Koin", "Ktor", "Coil", "Firebase",
+                "Backend (Ktor)", "Docker", "Google Cloud Functions", "Gemini API", "MVVM",
+                "DeepLinks", "Clean Architecture", "Multimodularity", "Layered Model", "Repository Pattern"
+            )
         )
-        title.contains("Calabozos", ignoreCase = true) -> Pair(
-            "Juego de rol digital inspirado en Dungeons & Dragons. Incluye creación de personajes, sistema de combate y narrativa interactiva.",
-            listOf("Unity", "C#", "SQLite", "Photon", "DOTween")
+        title.contains("Calabozos y compuertas", ignoreCase = true) -> Pair(
+            "Calabozos y Compuertas Mobile es una aplicación diseñada para llevar la emoción y la lógica de los juegos de calabozos y el funcionamiento de las compuertas lógicas a tu dispositivo móvil. La aplicación parece estar dividida en varios módulos, incluyendo un libro de runas, un libro de lógica y un controlador, lo que sugiere una rica interacción y contenido educativo o de juego.",
+            listOf(
+                "Compose Multiplatform", "Koin", "Ktor", "Coil", "MVVM",
+                "Clean Architecture", "Multimodularity", "Layered Model", "Repository Pattern"
+            )
         )
-        title.contains("Portfolio", ignoreCase = true) -> Pair(
-            "Sitio web profesional showcasing para desarrolladora frontend. Diseño responsive con animaciones y portfolio interactivo.",
-            listOf("HTML5", "CSS3", "JavaScript", "SASS", "Webpack")
+        title.contains("Portafolio Daniela Navarro Galeana", ignoreCase = true) -> Pair(
+            "Esta página web presenta el perfil de Daniela Navarro Galeana, una estudiante de Comercio Internacional y Aduanas. El contenido cubre su experiencia profesional, formación académica y habilidades, incluyendo el período actual en el que se encuentra cursando sus estudios.",
+            listOf("TypeScript", "React", "Tailwind CSS", "Next.js", "Firebase Hosting")
         )
         title.contains("Eikocolors", ignoreCase = true) -> Pair(
-            "Herramienta web para generación y gestión de paletas de colores. Incluye extractor de colores de imágenes y generador de esquemas.",
-            listOf("Vue.js", "Nuxt.js", "TailwindCSS", "Canvas API", "PWA")
+            "Web hecha para empresa de diseño gráfico, exponiendo sus trabajos y servicios.",
+            listOf("TypeScript", "React", "Tailwind CSS", "Next.js", "Firebase Hosting")
         )
         title.contains("Fuente", ignoreCase = true) -> Pair(
-            "Plataforma educativa online con cursos interactivos y sistema de evaluación. Enfocada en aprendizaje personalizado.",
-            listOf("Angular", "TypeScript", "Firebase", "RxJS", "Angular Material")
+            "Web hecha para mostrar los videos del día del padre hechos por sus hijos, fue hecha para un kinder.",
+            listOf("React", "Vite", "CSS")
         )
         title.contains("Danonino", ignoreCase = true) -> Pair(
-            "Sitio web promocional interactivo para productos infantiles. Incluye juegos educativos y contenido para padres.",
-            listOf("React", "Three.js", "GSAP", "Styled Components", "Storybook")
+            "Web hecha para mi novia bonita.",
+            listOf("React", "CSS", "Vite")
         )
         title.contains("Eva", ignoreCase = true) -> Pair(
-            "Aplicación multiplataforma para gestión de salud personal. Seguimiento de medicamentos, citas médicas y recordatorios.",
-            listOf("Kotlin Multiplatform", "Compose Multiplatform", "SQLDelight", "Ktor", "Koin")
+            "Librería multiplataforma hecha para experimentar con las funcionalidades de la IA EVA, principalmente para crear componentes para otros proyectos como Lyra o Lerna.",
+            listOf("Compose Multiplatform (Android, iOS, Wasm, Desktop)", "Gemini API")
         )
-        title.contains("QR", ignoreCase = true) -> Pair(
-            "Generador y lector de códigos QR con funciones avanzadas. Soporte para múltiples formatos y personalización visual.",
-            listOf("Android", "Kotlin", "CameraX", "ML Kit", "Material You")
+        title.contains("Lumi", ignoreCase = true) -> Pair(
+            "Lumi es una herramienta inteligente que democratiza la creación y el escaneo de códigos QR. Aprovecha la potencia de la API de Gemini para transformar ideas en códigos QR visualmente impactantes y funcionalmente robustos, todo desde el dispositivo del usuario.",
+            listOf("Jetpack Compose", "Gemini API", "QR-Rose", "MVVM", "Clean Architecture", "Repository Pattern")
         )
-        title.contains("Squid", ignoreCase = true) -> Pair(
-            "Juego interactivo basado en la serie Squid Game. Incluye múltiples mini-juegos y sistema de puntuación global.",
-            listOf("JavaScript", "Canvas API", "WebGL", "Socket.io", "Express")
+        title.contains("Squidgame", ignoreCase = true) -> Pair(
+            "El objetivo general de este proyecto es diseñar, desarrollar e implementar un sistema embebido interactivo que simule de manera funcional y atractiva el juego del \"Puente de Cristal\", inspirado en la serie \"El Juego del Calamar\", buscando destacar entre otros proyectos por su nivel de integración y calidad.",
+            listOf("Compose Multiplatform", "JVM", "Wasm", "Firebase Realtime", "Firebase Firestore")
+        )
+        title.contains("SquidGames (Version Mobile)", ignoreCase = true) -> Pair(
+            "El objetivo general de este proyecto es diseñar, desarrollar e implementar un sistema embebido interactivo que simule de manera funcional y atractiva el juego del \"Puente de Cristal\", inspirado en la serie \"El Juego del Calamar\", buscando destacar entre otros proyectos por su nivel de integración y calidad.",
+            listOf("Jetpack Compose", "TensorFlow", "Koin", "Ktor", "Firebase Realtime", "Firebase Firestore")
         )
         title.contains("Color", ignoreCase = true) -> Pair(
             "Juego de escritorio para adivinar colores RGB. Entrena la percepción visual del color con diferentes niveles de dificultad.",
-            listOf("Electron", "JavaScript", "CSS3", "Node.js", "Chart.js")
+            listOf("Compose Multiplatform JVM")
         )
-        title.contains("Dragon", ignoreCase = true) -> Pair(
-            "Juego de estrategia por turnos con temática de dragones. Incluye sistema de cartas y batallas tácticas.",
-            listOf("Flutter", "Dart", "Flame Engine", "Hive", "Provider")
+        title.contains("DragonMatches", ignoreCase = true) -> Pair(
+            "Una app inspirada en el Dragonball con una tematica de tinder, se explora el uso de el swipe de tinder, ademas de que es funcional conectando con la api de dragonball.",
+            listOf("Koin", "Ktor", "Coil", "Jetpack Compose")
         )
         title.contains("Asian", ignoreCase = true) -> Pair(
             "Línea de tiempo interactiva del crecimiento económico asiático. Visualización de datos históricos y proyecciones futuras.",
-            listOf("D3.js", "React", "TypeScript", "Recharts", "Framer Motion")
+            listOf("TypeScript", "React", "Tailwind CSS", "Next.js", "Firebase Hosting")
         )
         else -> Pair(
-            "Proyecto de desarrollo de software con enfoque en soluciones innovadoras y experiencia de usuario excepcional.",
-            listOf("JavaScript", "React", "Node.js", "CSS3", "HTML5")
+            "Próximamente...",
+            listOf()
         )
     }
 }
@@ -81,9 +120,7 @@ fun getProjectDetails(title: String): Pair<String, List<String>> {
 fun getProjectImages(title: String): List<String> {
     return when {
         title.contains("Quickness", ignoreCase = true) -> listOf(
-            "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=600&h=400&fit=crop",
-            "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&h=400&fit=crop"
+            "https://vluoppbaehfmhkebyygv.supabase.co/storage/v1/object/public/proyectos//Quickness_Wallpaper.png"
         )
         title.contains("Lerna", ignoreCase = true) -> listOf(
             "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=400&fit=crop",

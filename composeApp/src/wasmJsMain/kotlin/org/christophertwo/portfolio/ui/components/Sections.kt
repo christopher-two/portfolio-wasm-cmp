@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,10 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.christophertwo.portfolio.ui.components.sections.CardTitle
@@ -131,39 +127,10 @@ fun Projects(
         professionalProjects + personalProjects
     }
 
-    Column(
+    Box(
         modifier = Modifier.size(width = windowSizeWidth.dp, height = windowSizeHeight.dp)
     ) {
-        // Título de la sección
-        Text(
-            text = "PROYECTOS",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp, bottom = 16.dp),
-            style = MaterialTheme.typography.headlineLarge.copy(
-                letterSpacing = 4.sp
-            )
-        )
-
-        Text(
-            text = "Desarrollador Multiplataforma",
-            fontSize = 16.sp,
-            color = Color.White.copy(alpha = 0.7f),
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 32.dp),
-            style = MaterialTheme.typography.bodyLarge.copy(
-                letterSpacing = 2.sp
-            )
-        )
-
-        // Grid de proyectos
-        ProjectsGrid(projects = allProjects)
+        ProjectsGrid(projects = allProjects, windowSizeWidth = windowSizeWidth)
     }
 }
 
