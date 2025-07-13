@@ -1,4 +1,4 @@
-package org.christophertwo.portfolio.ui.components
+package org.christophertwo.portfolio.ui.sections
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -17,18 +17,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.christophertwo.portfolio.ui.components.sections.CardTitle
-import org.christophertwo.portfolio.ui.components.sections.Project
-import org.christophertwo.portfolio.ui.components.sections.ProjectLevel
-import org.christophertwo.portfolio.ui.components.sections.ProjectsGrid
-import org.christophertwo.portfolio.utils.ProjectPersonal
-import org.christophertwo.portfolio.utils.ProjectProfessional
+import org.christophertwo.portfolio.ui.components.IconsDynamics
 import org.jetbrains.compose.resources.painterResource
 import portfolio.composeapp.generated.resources.Res
 import portfolio.composeapp.generated.resources.compose_multiplatform
@@ -87,62 +81,4 @@ fun TitleApp(
             }
         )
     }
-}
-
-
-@Composable
-fun Projects(
-    windowSizeWidth: Int,
-    windowSizeHeight: Int
-) {
-    val allProjects = remember {
-        val professionalProjects = ProjectProfessional.entries.map { project ->
-            val (detailedDesc, technologies) = getProjectDetails(project.title)
-            Project(
-                name = project.title,
-                platform = getPlatformFromTitle(project.title),
-                level = ProjectLevel.PROFESSIONAL,
-                imageUrl = getProjectImages(project.title).first(),
-                description = project.uri,
-                detailedDescription = detailedDesc,
-                technologies = technologies,
-                images = getProjectImages(project.title)
-            )
-        }
-
-        val personalProjects = ProjectPersonal.entries.map { project ->
-            val (detailedDesc, technologies) = getProjectDetails(project.title)
-            Project(
-                name = project.title,
-                platform = getPlatformFromTitle(project.title),
-                level = ProjectLevel.PERSONAL,
-                imageUrl = getProjectImages(project.title).first(),
-                description = project.uri,
-                detailedDescription = detailedDesc,
-                technologies = technologies,
-                images = getProjectImages(project.title)
-            )
-        }
-
-        professionalProjects + personalProjects
-    }
-
-    Box(
-        modifier = Modifier.size(width = windowSizeWidth.dp, height = windowSizeHeight.dp)
-    ) {
-        ProjectsGrid(projects = allProjects, windowSizeWidth = windowSizeWidth)
-    }
-}
-
-@Composable
-fun Skills(
-    windowSizeWidth: Int,
-    windowSizeHeight: Int
-) {
-    Box(
-        modifier = Modifier.height((windowSizeWidth / 2).dp),
-        content = {
-
-        }
-    )
 }

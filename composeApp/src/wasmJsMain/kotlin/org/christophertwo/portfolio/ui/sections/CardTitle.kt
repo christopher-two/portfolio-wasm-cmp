@@ -1,4 +1,4 @@
-package org.christophertwo.portfolio.ui.components.sections
+package org.christophertwo.portfolio.ui.sections
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
